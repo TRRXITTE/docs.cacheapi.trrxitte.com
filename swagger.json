@@ -1,0 +1,2481 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "This document outlines the public API methods available using the XTE and XTCASH Blockchain Cache API which is a replacement for normal XTE and XTCASH daemon RPC calls.",
+    "version": "0.0.17-oas3",
+    "title": "XTE and XTCASH Blockchain Cache API",
+    "contact": {
+      "email": "integration@trrxitte.com"
+    },
+    "license": {
+      "name": "GNU Affero General Public License version 3",
+      "url": "https://opensource.org/licenses/AGPL-3.0"
+    }
+  },
+  "tags": [
+    {
+      "name": "Chain/Cache"
+    },
+    {
+      "name": "Community Mining Pools"
+    },
+    {
+      "name": "Community Nodes"
+    },
+    {
+      "name": "Blocks"
+    },
+    {
+      "name": "Transactions"
+    },
+    {
+      "name": "Wallet Operations"
+    },
+    {
+      "name": "Legacy Operations"
+    }
+  ],
+  "paths": {
+    "/amounts": {
+      "get": {
+        "tags": [
+          "Chain/Cache"
+        ],
+        "summary": "Returns the current mixable amounts on the network",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "amount": {
+                        "type": "integer"
+                      },
+                      "timestamp": {
+                        "type": "integer"
+                      },
+                      "height": {
+                        "type": "integer"
+                      },
+                      "txnHash": {
+                        "type": "string"
+                      },
+                      "hash": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Mixable amounts not found"
+          }
+        }
+      }
+    },
+    "/chain/stats": {
+      "get": {
+        "tags": [
+          "Chain/Cache"
+        ],
+        "summary": "Returns block statistics for the last 2,880 (1 day) blocks",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "maxItems": 2880,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "timestamp": {
+                        "type": "integer",
+                        "example": 1551194293
+                      },
+                      "difficulty": {
+                        "type": "integer",
+                        "example": 5652826471
+                      },
+                      "nonce": {
+                        "type": "integer",
+                        "example": 2684423497
+                      },
+                      "size": {
+                        "type": "integer",
+                        "example": 428
+                      },
+                      "txnCount": {
+                        "type": "integer",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/checkpointsIPFSHash": {
+      "get": {
+        "tags": [
+          "Chain/Cache"
+        ],
+        "summary": "Returns the current checkpoints IPFS hash",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "hash": {
+                      "type": "string",
+                      "example": "QmZ4B2M9DCfs2ycDCCRcHgBd5iAAbYfj4e4d1q4auCKucX",
+                      "description": "The IPFS content ID (hash)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Could not locate the IPFS hash in DNS"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/fee": {
+      "get": {
+        "tags": [
+          "Chain/Cache"
+        ],
+        "summary": "Returns node fee information for using this node interface",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "type": "string",
+                      "example": "TRTLv1pacKFJk9QgSmzk2LJWn14JGmTKzReFLz1RgY3K9Ryn7783RDT2TretzfYdck5GMCGzXTuwKfePWQYViNs4avKpnUbrwfQ"
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/height": {
+      "get": {
+        "tags": [
+          "Chain/Cache"
+        ],
+        "summary": "Returns the blockchain cache current height",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "height": {
+                      "type": "integer",
+                      "example": 1129669
+                    },
+                    "network_height": {
+                      "type": "integer",
+                      "example": 1129669
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/info": {
+      "get": {
+        "tags": [
+          "Chain/Cache"
+        ],
+        "summary": "Returns current network information regarding the underlying network node(s)",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "alt_blocks_count": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "difficulty": {
+                      "type": "integer",
+                      "example": 3115454145
+                    },
+                    "grey_peerlist_size": {
+                      "type": "integer",
+                      "example": 1089
+                    },
+                    "hashrate": {
+                      "type": "integer",
+                      "example": 103848471
+                    },
+                    "height": {
+                      "type": "integer",
+                      "example": 1129673
+                    },
+                    "incoming_connections_count": {
+                      "type": "integer",
+                      "example": 31
+                    },
+                    "last_known_block_index": {
+                      "type": "integer",
+                      "example": 1129671
+                    },
+                    "major_version": {
+                      "type": "integer",
+                      "example": 4
+                    },
+                    "minor_version": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "network_height": {
+                      "type": "integer",
+                      "example": 1129673
+                    },
+                    "outgoing_connections_count": {
+                      "type": "integer",
+                      "example": 8
+                    },
+                    "start_time": {
+                      "type": "integer",
+                      "example": 1546895003
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "supported_height": {
+                      "type": "integer",
+                      "example": 1000000
+                    },
+                    "synced": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "testnet": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "tx_count": {
+                      "type": "integer",
+                      "example": 1598886
+                    },
+                    "tx_pool_size": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "upgrade_heights": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "example": [
+                          187000,
+                          350000,
+                          440000,
+                          620000,
+                          700000,
+                          800000,
+                          1000000,
+                          1200000,
+                          1400000,
+                          1600000,
+                          1800000,
+                          2000000
+                        ]
+                      }
+                    },
+                    "version": {
+                      "type": "string",
+                      "example": "0.12.0"
+                    },
+                    "white_peerlist_size": {
+                      "type": "integer",
+                      "example": 38
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/reward/last": {
+      "get": {
+        "tags": [
+          "Chain/Cache"
+        ],
+        "summary": "Returns the last base block reward in XTE",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": 28259.55
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/reward/next": {
+      "get": {
+        "tags": [
+          "Chain/Cache"
+        ],
+        "summary": "Returns the next base block reward in XTE",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": 28259.54
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "tags": [
+          "Chain/Cache"
+        ],
+        "summary": "Returns an 'ok' value indicating that the cache is alive",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/supply": {
+      "get": {
+        "tags": [
+          "Chain/Cache"
+        ],
+        "summary": "Returns the current circulating currency supply in XTE",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": 33090018087.69
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/block/count": {
+      "get": {
+        "tags": [
+          "Blocks"
+        ],
+        "summary": "Returns the total number of blocks in the cache",
+        "responses": {
+          "200": {
+            "description": "Block Count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "blockCount": {
+                      "type": "integer",
+                      "example": 1129692
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/block/{term}": {
+      "get": {
+        "tags": [
+          "Blocks"
+        ],
+        "summary": "Returns the block information for the block with the specified hash or height",
+        "parameters": [
+          {
+            "name": "term",
+            "description": "Either the height of the block or the hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Block_Detail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/block/header/{term}": {
+      "get": {
+        "tags": [
+          "Blocks"
+        ],
+        "summary": "Returns the block header for the block with the specified hash or height",
+        "parameters": [
+          {
+            "name": "term",
+            "description": "Either the height of the block or the hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Block_Header"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/block/header/top": {
+      "get": {
+        "tags": [
+          "Blocks"
+        ],
+        "summary": "Returns the top block header",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Block_Header"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/block/headers/{height}": {
+      "get": {
+        "tags": [
+          "Blocks"
+        ],
+        "summary": "Returns details regarding the 30 blocks preceeding the specified block including the specified block",
+        "parameters": [
+          {
+            "name": "height",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "maxItems": 30,
+                  "items": {
+                    "$ref": "#/components/schemas/Block_Summary"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/block/headers/{height}/bulk": {
+      "get": {
+        "tags": [
+          "Blocks"
+        ],
+        "summary": "Returns details regarding the 1,000 blocks preceeding the specified block including the specified block",
+        "parameters": [
+          {
+            "name": "height",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "maxItems": 1000,
+                  "items": {
+                    "$ref": "#/components/schemas/Block_Summary"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/node/list": {
+      "get": {
+        "tags": [
+          "Community Nodes"
+        ],
+        "summary": "Returns the list of available public nodes with extended information. This is a drop-in replacement for https://github.com/TRRXITTE/XTEnetworkserver/blob/main/traaitt.json",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nodes": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/NodeList"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/node/list/available": {
+      "get": {
+        "tags": [
+          "Community Nodes"
+        ],
+        "summary": "Returns the list of available (have been online at least once) public nodes with extended information. This is a drop-in replacement for https://github.com/TRRXITTE/XTEnetworkserver/blob/main/traaitt.json",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "max_fee",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "Do not return nodes with a fee higher than this value"
+          },
+          {
+            "in": "query",
+            "name": "min_version",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Do not return nodes that are not at least this version"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nodes": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/NodeList"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/node/list/online": {
+      "get": {
+        "tags": [
+          "Community Nodes"
+        ],
+        "summary": "Returns the list of online (as of last check) public nodes with extended information. This is a drop-in replacement for https://github.com/TRRXITTE/XTEnetworkserver/blob/main/traaitt.json",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "max_fee",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "Do not return nodes with a fee higher than this value"
+          },
+          {
+            "in": "query",
+            "name": "min_version",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Do not return nodes that are not at least this version"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nodes": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/NodeList"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/node/stats": {
+      "get": {
+        "tags": [
+          "Community Nodes"
+        ],
+        "summary": "Returns extended monitoring information of the nodes including the last 20 online statuses",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NodeStats"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/pool/list": {
+      "get": {
+        "tags": [
+          "Community Mining Pools"
+        ],
+        "summary": "Returns the list of available known mining pools with extended information. This is a drop-in replacement for / ",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pools": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PoolList"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/pool/list/available": {
+      "get": {
+        "tags": [
+          "Community Mining Pools"
+        ],
+        "summary": "Returns the list of available (have been online at least once) known mining pools with extended information. This is a drop-in replacement for / ",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pools": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PoolList"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/pool/list/online": {
+      "get": {
+        "tags": [
+          "Community Mining Pools"
+        ],
+        "summary": "Returns the list of online (as of last check) known mining pools with extended information. This is a drop-in replacement for / ",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pools": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PoolList"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/pool/stats": {
+      "get": {
+        "tags": [
+          "Community Mining Pools"
+        ],
+        "summary": "Returns extended monitoring information of the known mining pools including the last 20 online statuses",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PoolStats"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/transaction/pool": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Returns the transactions currently in the mempool",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "txnHash": {
+                        "type": "string",
+                        "example": "375837ed9a78873ac6819b27c6f8b1b2614ce1a0ce56375e735c338baddb3d2c"
+                      },
+                      "fee": {
+                        "type": "integer",
+                        "example": 100
+                      },
+                      "size": {
+                        "type": "integer",
+                        "example": 6126
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "example": 5910218
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/transaction/{hash}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Returns details regarding the transaction with the specified hash",
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transaction"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/transaction/{hash}/inputs": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Returns the transcations inputs for the transaction with the specified hash",
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Transaction_Input"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/transaction/{hash}/outputs": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Returns the transcations outputs for the transaction with the specified hash",
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Transaction_Output"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/transactions/{paymentId}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Returns the transcations hashes of all transactions with the specified paymentId",
+        "parameters": [
+          {
+            "name": "paymentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "hash": {
+                        "type": "string",
+                        "example": "2ed24b81b0b51b86223002e8515b141b8a4b09215be2afa86de46153fa8f2167"
+                      },
+                      "mixin": {
+                        "type": "integer",
+                        "example": 4
+                      },
+                      "timestamp": {
+                        "type": "integer",
+                        "example": 1521317601
+                      },
+                      "fee": {
+                        "type": "integer",
+                        "example": 10
+                      },
+                      "size": {
+                        "type": "integer",
+                        "example": 22639
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "example": 2048090
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/sync": {
+      "post": {
+        "tags": [
+          "Wallet Operations"
+        ],
+        "summary": "Returns all the necessary information for a wallet to discover which outputs belong to it",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Wallet_Sync_Block"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "lastKnownBlockHashes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": [
+                        "b226a29c8ea906d89ecda798993888307e2f9da86eb3787a63c9adb388c47bc1",
+                        "b5b53a17371e3681f1ded1ddd20339f8c95f54e7774c4fb759db3367c5e75a2d"
+                      ]
+                    }
+                  },
+                  "blockCount": {
+                    "type": "integer",
+                    "example": 100,
+                    "default": 100
+                  },
+                  "scanHeight": {
+                    "type": "integer",
+                    "example": 1100000
+                  }
+                }
+              }
+            }
+          },
+          "description": "A syncronization request. Either lastKnownBlockHashes or scanHeight is required."
+        }
+      }
+    },
+    "/get_transactions_status": {
+      "post": {
+        "tags": [
+          "Legacy Operations"
+        ],
+        "summary": "Returns the statuses of the supplied transactions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transactionsInPool": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "2851c17fa2411b94ca432734789fa2b905dbb7edde4d4c82c27586cfebd5f9ec"
+                      ]
+                    },
+                    "transactionsInBlock": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "afbe61d9b4795806987f47bc3b984533e88fcaf588f18f892cf307cd78da0788"
+                      ]
+                    },
+                    "transactionsUnknown": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+                      ]
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "transactionHashes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "afbe61d9b4795806987f47bc3b984533e88fcaf588f18f892cf307cd78da0788",
+                      "2851c17fa2411b94ca432734789fa2b905dbb7edde4d4c82c27586cfebd5f9ec",
+                      "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "description": "A transaction status request"
+        }
+      }
+    },
+    "/getwalletsyncdata/{height}": {
+      "get": {
+        "tags": [
+          "Legacy Operations"
+        ],
+        "summary": "Returns legacy wallet sync data for up to 100 blocks",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "height",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "example": 1100500,
+            "description": "The height to start returning blocks for"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Wallet_Sync_Data"
+                      }
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/getwalletsyncdata/{height}/{blockCount}": {
+      "get": {
+        "tags": [
+          "Legacy Operations"
+        ],
+        "summary": "Returns legacy wallet sync data",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "height",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "example": 1100500,
+            "description": "The height to start returning blocks for"
+          },
+          {
+            "in": "path",
+            "name": "blockCount",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The maximum number of blocks to return",
+            "example": 100,
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Wallet_Sync_Data"
+                      }
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/getwalletsyncdata": {
+      "post": {
+        "tags": [
+          "Legacy Operations"
+        ],
+        "summary": "Returns legacy wallet sync data",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Wallet_Sync_Data"
+                      }
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "synced": {
+                      "type": "boolean",
+                      "example": false,
+                      "description": "If this value is set, regardless of if we returned any data or not, then we are at the top of the chain and the topBlock property will also be set"
+                    },
+                    "topBlock": {
+                      "type": "object",
+                      "properties": {
+                        "height": {
+                          "type": "integer",
+                          "example": 1524670,
+                          "description": "The height of the top block we know about"
+                        },
+                        "hash": {
+                          "type": "string",
+                          "example": "d8dedec9dfeed514b3c0f5b49c3fb7df399dda4e65528a8b9bacec574cfb3fce",
+                          "description": "The hash of the top block we know about"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "startHeight": {
+                    "type": "integer",
+                    "description": "The height to begin returning blocks from",
+                    "example": 1000
+                  },
+                  "startTimestamp": {
+                    "type": "integer",
+                    "description": "The timestamp to begin returning blocks from (unix style)",
+                    "example": 1547340327
+                  },
+                  "blockHashCheckpoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "0606a15147159e3f01dd90aa78828cf8587caed36203cd764701b56eb6ff6fd8",
+                      "1d61bf052ee2fa3720078ee01cf30e01ba305096bf3e3d3668fbc09bbeafa244"
+                    ]
+                  },
+                  "skipCoinbaseTransactions": {
+                    "type": "boolean",
+                    "example": false,
+                    "default": false,
+                    "description": "A flag that tells the cache to only returns blocks with non-coinbase transactions and for blocks that contain user transactions the coinbase transaction is trimmed off of the block record"
+                  }
+                }
+              }
+            }
+          },
+          "description": "A syncronization request"
+        }
+      }
+    },
+    "/getwalletsyncdata/preflight": {
+      "post": {
+        "tags": [
+          "Legacy Operations"
+        ],
+        "summary": "Returns preflight information for legacy wallet sync operations",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "height",
+                    "blockCount",
+                    "blockHashes",
+                    "status",
+                    "synced"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "height": {
+                      "type": "integer",
+                      "description": "The height of the next block to sync",
+                      "example": 1438743
+                    },
+                    "blockCount": {
+                      "type": "integer",
+                      "description": "How many blocks to sync remaining there are",
+                      "maximum": 100,
+                      "example": 5
+                    },
+                    "blockHashes": {
+                      "description": "The block hashes up to blockCount that would be returned",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "4684b2775824618b2a8954ed77618e225bbf2adadade446f70b1512d9ac580fe",
+                        "3509d61bb8d897091c824270e2bfc0136e1cb82d7814ba959cb6cb570f92dc0f"
+                      ]
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "synced": {
+                      "description": "Whether the request is synced to the top of the chain",
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "topBlock": {
+                      "description": "Describes the top block in the chain if synced is true",
+                      "type": "object",
+                      "properties": {
+                        "height": {
+                          "type": "integer",
+                          "description": "The height of the top block",
+                          "example": 1887377
+                        },
+                        "hash": {
+                          "type": "string",
+                          "description": "The hash of the top block",
+                          "example": "2bd215909efbcfc90d6572f8dce44b16317eab91583dac2d3e20313d0d8541be"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "startHeight": {
+                    "type": "integer",
+                    "description": "The height to begin returning blocks from",
+                    "example": 1000
+                  },
+                  "startTimestamp": {
+                    "type": "integer",
+                    "description": "The timestamp to begin returning blocks from (unix style)",
+                    "example": 1547340327
+                  },
+                  "blockHashCheckpoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "0606a15147159e3f01dd90aa78828cf8587caed36203cd764701b56eb6ff6fd8",
+                      "1d61bf052ee2fa3720078ee01cf30e01ba305096bf3e3d3668fbc09bbeafa244"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "description": "A syncronization request"
+        }
+      }
+    },
+  },
+  "externalDocs": {
+    "description": "TRRXITTE Int., incorporate",
+    "url": "https://github.com/TRRXITTE"
+  },
+  "servers": [
+    {
+      "url": "https://cacheapi.traaitt.com"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "PoolList": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "AtPool.party",
+            "description": "The name of the mining pool"
+          },
+          "url": {
+            "type": "string",
+            "example": "https://turtle.atpool.party",
+            "description": "The URL of the pool website"
+          },
+          "api": {
+            "type": "string",
+            "example": "https://turtle-eu.atpool.party:8117/",
+            "description": "The base URL of the mining pool API"
+          },
+          "type": {
+            "type": "string",
+            "example": "forknote",
+            "description": "The mining pool type (package)"
+          },
+          "miningAddress": {
+            "type": "string",
+            "example": "geo.atpool.party",
+            "description": "The mining pool stratum server address"
+          },
+          "mergedMining": {
+            "type": "boolean",
+            "example": false,
+            "description": "Whether the mining pool supports merged mining"
+          },
+          "mergedMiningIsParentChain": {
+            "type": "boolean",
+            "example": false,
+            "description": "If merged mining is activated, defines whether it is done as the parent chain"
+          },
+          "fee": {
+            "type": "number",
+            "example": 0.1,
+            "description": "The mining pool percentage feel (ex. 0.1%)"
+          },
+          "minPayout": {
+            "type": "integer",
+            "example": 10000,
+            "description": "The minimum payout amount to miners in atomic units"
+          },
+          "timestamp": {
+            "type": "integer",
+            "example": 1567103044,
+            "description": "The last time we checked this mining pool (UTC)"
+          },
+          "availability": {
+            "type": "integer",
+            "example": 100,
+            "description": "Percent of time over the last 20 polling cycles that the pool was online"
+          },
+          "online": {
+            "type": "boolean",
+            "example": true,
+            "description": "Was the mining pool online the last time we checked?"
+          }
+        }
+      },
+      "PoolStats": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "AtPool.party",
+            "description": "The name of the mining pool"
+          },
+          "url": {
+            "type": "string",
+            "example": "https://turtle.atpool.party",
+            "description": "The URL of the pool website"
+          },
+          "api": {
+            "type": "string",
+            "example": "https://turtle-eu.atpool.party:8117/",
+            "description": "The base URL of the mining pool API"
+          },
+          "type": {
+            "type": "string",
+            "example": "forknote",
+            "description": "The mining pool type (package)"
+          },
+          "miningAddress": {
+            "type": "string",
+            "example": "geo.atpool.party",
+            "description": "The mining pool stratum server address"
+          },
+          "mergedMining": {
+            "type": "boolean",
+            "example": false,
+            "description": "Whether the mining pool supports merged mining"
+          },
+          "mergedMiningIsParentChain": {
+            "type": "boolean",
+            "example": false,
+            "description": "If merged mining is activated, defines whether it is done as the parent chain"
+          },
+          "fee": {
+            "type": "number",
+            "example": 0.1,
+            "description": "The mining pool percentage feel (ex. 0.1%)"
+          },
+          "minPayout": {
+            "type": "integer",
+            "example": 10000,
+            "description": "The minimum payout amount to miners in atomic units"
+          },
+          "timestamp": {
+            "type": "integer",
+            "example": 1567103044,
+            "description": "The last time we checked this mining pool (UTC)"
+          },
+          "availability": {
+            "type": "integer",
+            "example": 100,
+            "description": "Percent of time over the last 20 polling cycles that the pool was online"
+          },
+          "online": {
+            "type": "boolean",
+            "example": true,
+            "description": "Was the mining pool online the last time we checked?"
+          },
+          "height": {
+            "type": "integer",
+            "example": 1799240,
+            "description": "The block height of the mining pool the last time we checked"
+          },
+          "hashrate": {
+            "type": "integer",
+            "example": 318546,
+            "description": "The hashrate of the mining pool the last time we checked"
+          },
+          "miners": {
+            "type": "integer",
+            "example": 13,
+            "description": "The number of miners using the mining pool the last time we checked"
+          },
+          "lastBlock": {
+            "type": "integer",
+            "example": 1567093663,
+            "description": "The timestamp of when the mining pool last found a block (UTC)"
+          },
+          "history": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "$ref": "#/components/schemas/PoolHistory"
+            }
+          }
+        }
+      },
+      "PoolHistory": {
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "example": 1567103044,
+            "description": "The UTC timestamp of the polling check"
+          },
+          "online": {
+            "type": "boolean",
+            "example": true,
+            "description": "The online status of the mining pool at the time of the check"
+          }
+        }
+      },
+      "NodeList": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "XTE and XTCASH BlockChain Cache - SSL",
+            "description": "The name of the node"
+          },
+          "url": {
+            "type": "string",
+            "example": "cacheapi.XTE and XTCASH.com",
+            "description": "The hostname of the node"
+          },
+          "port": {
+            "type": "integer",
+            "example": 443,
+            "description": "The port number the node operates on"
+          },
+          "ssl": {
+            "type": "boolean",
+            "example": true,
+            "description": "Does the node support SSL?"
+          },
+          "cache": {
+            "type": "boolean",
+            "example": true,
+            "description": "Is the node an implementation of a blockchain cache?"
+          },
+          "fee": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string",
+                "example": "",
+                "description": "The node fee address"
+              },
+              "amount": {
+                "type": "integer",
+                "example": 0,
+                "description": "The node fee amount"
+              }
+            }
+          },
+          "availability": {
+            "type": "integer",
+            "example": 100,
+            "description": "Percent of time over the last 20 polling cycles that the node was online"
+          },
+          "online": {
+            "type": "boolean",
+            "example": true,
+            "description": "Was the node online the last time we checked?"
+          },
+          "version": {
+            "type": "string",
+            "example": "0.18.0",
+            "description": "The version number reported by the node"
+          },
+          "timestamp": {
+            "type": "integer",
+            "example": 1567103464,
+            "description": "The last time we checked this node (UTC)"
+          }
+        }
+      },
+      "NodeStats": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "XTE and XTCASH BlockChain Cache - SSL",
+            "description": "The name of the node"
+          },
+          "url": {
+            "type": "string",
+            "example": "cacheapi.XTE and XTCASH.com",
+            "description": "The hostname of the node"
+          },
+          "port": {
+            "type": "integer",
+            "example": 443,
+            "description": "The port number the node operates on"
+          },
+          "ssl": {
+            "type": "boolean",
+            "example": true,
+            "description": "Does the node support SSL?"
+          },
+          "cache": {
+            "type": "boolean",
+            "example": true,
+            "description": "Is the node an implementation of a blockchain cache?"
+          },
+          "fee": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string",
+                "example": "",
+                "description": "The node fee address"
+              },
+              "amount": {
+                "type": "integer",
+                "example": 0,
+                "description": "The node fee amount"
+              }
+            }
+          },
+          "availability": {
+            "type": "integer",
+            "example": 100,
+            "description": "Percent of time over the last 20 polling cycles that the node was online"
+          },
+          "online": {
+            "type": "boolean",
+            "example": true,
+            "description": "Was the node online the last time we checked?"
+          },
+          "version": {
+            "type": "string",
+            "example": "0.18.0",
+            "description": "The version number reported by the node"
+          },
+          "timestamp": {
+            "type": "integer",
+            "example": 1567103464,
+            "description": "The UTC timestamp of the last time this node was checked"
+          },
+          "height": {
+            "type": "integer",
+            "example": 1791306,
+            "description": "The last reported height of the node"
+          },
+          "connectionsIn": {
+            "type": "integer",
+            "example": 31,
+            "description": "The last reported number of connections in to the node"
+          },
+          "connectionsOut": {
+            "type": "integer",
+            "example": 8,
+            "description": "The last reported number of connections out from the node"
+          },
+          "difficulty": {
+            "type": "integer",
+            "example": 10026186855,
+            "description": "The last reported network difficulty from the node"
+          },
+          "hashrate": {
+            "example": 334206228,
+            "description": "The last reported network hashrate from the node"
+          },
+          "txPoolSize": {
+            "example": 0,
+            "description": "The last reported transaction pool size at the node"
+          },
+          "history": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "$ref": "#/components/schemas/NodeHistory"
+            }
+          }
+        }
+      },
+      "NodeHistory": {
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "example": 1567103464,
+            "description": "The UTC timestamp of the polling check"
+          },
+          "online": {
+            "type": "boolean",
+            "example": true,
+            "description": "The online status of the node at the time of the check"
+          }
+        }
+      },
+      "Transaction": {
+        "properties": {
+          "tx": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Transaction_Header"
+              },
+              {
+                "properties": {
+                  "mixin": {
+                    "type": "integer",
+                    "example": 4
+                  },
+                  "paymentId": {
+                    "type": "string"
+                  },
+                  "extra": {
+                    "type": "string"
+                  },
+                  "unlock_time": {
+                    "type": "string",
+                    "example": "1106538"
+                  },
+                  "nonce": {
+                    "type": "string"
+                  },
+                  "publicKey": {
+                    "type": "string",
+                    "example": "a64193a1718ad9f716ef9f771419319df54f108330da313d24469099dc6d573f"
+                  },
+                  "inputs": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Transaction_Input"
+                    }
+                  },
+                  "outputs": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Transaction_Output"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "block": {
+            "type": "object",
+            "properties": {
+              "cumul_size": {
+                "type": "integer",
+                "example": 12588
+              },
+              "difficulty": {
+                "type": "integer",
+                "example": 3369493820
+              },
+              "hash": {
+                "type": "string",
+                "example": "fe207be47b035cba0951cfd1cd54c17d035cb2efe6f2b460f2b462c43678f567"
+              },
+              "height": {
+                "type": "integer",
+                "example": 1129743
+              },
+              "timestamp": {
+                "type": "integer",
+                "example": 1546913815
+              },
+              "tx_count": {
+                "type": "integer",
+                "example": 3
+              },
+              "depth": {
+                "type": "integer",
+                "example": 4
+              }
+            }
+          }
+        }
+      },
+      "Block_Detail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Block_Header"
+          },
+          {
+            "properties": {
+              "transactions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Transaction_Header"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Block_Header": {
+        "properties": {
+          "hash": {
+            "type": "string",
+            "example": "b226a29c8ea906d89ecda798993888307e2f9da86eb3787a63c9adb388c47bc1"
+          },
+          "prevHash": {
+            "type": "string",
+            "example": "b5b53a17371e3681f1ded1ddd20339f8c95f54e7774c4fb759db3367c5e75a2d"
+          },
+          "height": {
+            "type": "integer",
+            "example": 1129696
+          },
+          "baseReward": {
+            "type": "integer",
+            "example": 2881614
+          },
+          "difficulty": {
+            "type": "integer",
+            "example": 3668838478
+          },
+          "majorVersion": {
+            "type": "integer",
+            "example": 4
+          },
+          "minorVersion": {
+            "type": "integer",
+            "example": 0
+          },
+          "nonce": {
+            "type": "integer",
+            "example": 1412340624
+          },
+          "size": {
+            "type": "integer",
+            "example": 8359
+          },
+          "timestamp": {
+            "type": "integer",
+            "example": 1546912440
+          },
+          "alreadyGeneratedCoins": {
+            "type": "integer",
+            "example": 3309050796227
+          },
+          "alreadyGeneratedTransactions": {
+            "type": "integer",
+            "example": 2728607
+          },
+          "reward": {
+            "type": "integer",
+            "example": 2881824
+          },
+          "sizeMedian": {
+            "type": "integer",
+            "example": 309
+          },
+          "totlaFeeAmount": {
+            "type": "integer",
+            "example": 210
+          },
+          "transactionsCumulativeSize": {
+            "type": "integer",
+            "example": 8144
+          },
+          "transactionCount": {
+            "type": "integer",
+            "example": 4
+          },
+          "depth": {
+            "type": "integer",
+            "example": 12
+          }
+        }
+      },
+      "Block_Summary": {
+        "properties": {
+          "size": {
+            "type": "integer",
+            "example": 12489
+          },
+          "difficulty": {
+            "type": "integer",
+            "example": 664181705
+          },
+          "hash": {
+            "type": "string",
+            "example": "cec44b86eec8e26cfbe1b78fa50c893ffef90fe4c7b0d6f0b17d6c290f98cce7"
+          },
+          "height": {
+            "type": "integer",
+            "example": 1000000
+          },
+          "timestamp": {
+            "type": "integer",
+            "example": 1543009724
+          },
+          "nonce": {
+            "type": "integer",
+            "example": 3422693826
+          },
+          "tx_count": {
+            "type": "integer",
+            "example": 2
+          }
+        }
+      },
+      "Random_Output": {
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "example": 1000
+          },
+          "outs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "global_amount_index": {
+                  "type": "integer",
+                  "example": 947527
+                },
+                "out_key": {
+                  "type": "string",
+                  "example": "a88f6bc8deb39414e00ed04d9bcdd0dc1f22a3673d222b482634c0e607ffd4fb"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Wallet_Sync_Block": {
+        "properties": {
+          "blockHash": {
+            "type": "string",
+            "example": "cec44b86eec8e26cfbe1b78fa50c893ffef90fe4c7b0d6f0b17d6c290f98cce7"
+          },
+          "height": {
+            "type": "integer",
+            "example": 1000000
+          },
+          "timestamp": {
+            "type": "integer",
+            "example": 1543009724
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "hash": {
+                  "type": "string",
+                  "example": "fdf5c761c116d1c291b691d1f696a19e4a422ac0970f41af1cd38cd8a64d75a7"
+                },
+                "publicKey": {
+                  "type": "string",
+                  "example": "00a45147725a871df09e1bd73a543d0eb95d81c158077da2dadde089f89016d0"
+                },
+                "unlockTime": {
+                  "type": "string",
+                  "example": "1106538"
+                },
+                "paymentId": {
+                  "type": "string",
+                  "example": "487b9be44dbe529e626ce5287ed387638fe6b208f15ee72a9807ad65719a169d"
+                },
+                "inputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "keyImage": {
+                        "type": "string",
+                        "example": "5f279712ba438978cf48521914880e21a6be990e644a2a5986dbeda0966c5891"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "02"
+                      }
+                    }
+                  }
+                },
+                "outputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "index": {
+                        "type": "integer",
+                        "example": 0
+                      },
+                      "globalIndex": {
+                        "type": "integer",
+                        "example": 231283
+                      },
+                      "key": {
+                        "type": "string",
+                        "example": "d1e663304b3cb396fe279631dc3d10f56a0333cc39840a4fbd9957eef58b52fb"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "example": 9
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "02"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Transaction_Header": {
+        "properties": {
+          "amount_out": {
+            "type": "integer",
+            "example": 2892781
+          },
+          "fee": {
+            "type": "integer",
+            "example": 0
+          },
+          "hash": {
+            "type": "string",
+            "example": "4fa7d427f9564edd81c0b486cfa2ae5e6c3c40cfac1c8644f77a8c7ca423ab34"
+          },
+          "size": {
+            "type": "integer",
+            "example": 309
+          }
+        }
+      },
+      "Transaction_Input": {
+        "properties": {
+          "keyImage": {
+            "type": "string",
+            "example": "305b6353534330a2b7b9ffcd3261793a60fc5702dc3c794a6d01933b5ac2b9d4"
+          },
+          "amount": {
+            "type": "integer",
+            "example": 8
+          },
+          "type": {
+            "type": "string",
+            "example": "02"
+          }
+        }
+      },
+      "Transaction_Output": {
+        "properties": {
+          "outputIndex": {
+            "type": "integer",
+            "example": 0
+          },
+          "globalIndex": {
+            "type": "integer",
+            "example": 234011
+          },
+          "amount": {
+            "type": "integer",
+            "example": 8
+          },
+          "key": {
+            "type": "string",
+            "example": "1743473429337ed93bf51af860226684228e64953631e000ec4e32116ff9ad53"
+          },
+          "type": {
+            "type": "string",
+            "example": "02"
+          }
+        }
+      },
+      "Wallet_Sync_Data": {
+        "properties": {
+          "blockHash": {
+            "type": "string",
+            "example": "221e7c19b11473c78694369945ef2b46d327255a3cf27e827c1da5a9971a4cbc"
+          },
+          "blockHeight": {
+            "type": "integer",
+            "example": 1106498
+          },
+          "blockTimestamp": {
+            "type": "integer",
+            "example": 1546214436
+          },
+          "coinbaseTX": {
+            "type": "object",
+            "properties": {
+              "hash": {
+                "type": "string",
+                "example": "6c2a9be4897d6b60b8c093bc3c7e24624910ae162f9b8d2b8c1f1b8156219e85"
+              },
+              "outputs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "amount": {
+                      "type": "integer",
+                      "example": 6
+                    },
+                    "key": {
+                      "type": "string",
+                      "example": "d8d4d10e6d663b4bdad910b93141f6b289be6c091097bcb9f140c37d3f5df95e"
+                    },
+                    "globalIndex": {
+                      "type": "integer",
+                      "example": 269142
+                    }
+                  }
+                }
+              },
+              "txPublicKey": {
+                "type": "string",
+                "example": "8770d63f4211bfe8f50c2344ee000e99c4023a9de382c36bfaa20846f71e8958"
+              },
+              "unlockTime": {
+                "type": "string",
+                "example": "1106538"
+              }
+            }
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "hash": {
+                  "type": "string",
+                  "example": "f6316d35ab64080165c6c0476e9382306de3a5ff3367b32ac36acd0e0d374f40"
+                },
+                "inputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "amount": {
+                        "type": "integer",
+                        "example": 90
+                      },
+                      "k_image": {
+                        "type": "string",
+                        "example": "bc8548a84bd1f0deed4f614d41022ad7f5cc15687e062eb3b29c4dfacb694dc9"
+                      }
+                    }
+                  }
+                },
+                "outputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "amount": {
+                        "type": "integer",
+                        "example": 6
+                      },
+                      "key": {
+                        "type": "string",
+                        "example": "d8d4d10e6d663b4bdad910b93141f6b289be6c091097bcb9f140c37d3f5df95e"
+                      },
+                      "globalIndex": {
+                        "type": "integer",
+                        "example": 1124145
+                      }
+                    }
+                  }
+                },
+                "paymentID": {
+                  "type": "string",
+                  "example": ""
+                },
+                "txPublicKey": {
+                  "type": "string",
+                  "example": "01213035e9be3db80afa81e5d0d0305ffaad00513f0f3f38deff67d6bc9c3a6b"
+                },
+                "unlockTime": {
+                  "type": "string",
+                  "example": "1106538"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
